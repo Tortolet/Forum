@@ -24,4 +24,55 @@ public class Comments {
 
     @ManyToMany(mappedBy = "comments")
     private Set<Users> usersCom = new HashSet<>();
+
+    public Comments() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Threads getThreads() {
+        return threads;
+    }
+
+    public void setThreads(Threads threads) {
+        this.threads = threads;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Set<Users> getUsersCom() {
+        return usersCom;
+    }
+
+    public void setUsersCom(Set<Users> usersCom) {
+        this.usersCom = usersCom;
+    }
 }
