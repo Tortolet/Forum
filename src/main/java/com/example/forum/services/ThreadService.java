@@ -14,9 +14,9 @@ public class ThreadService {
         this.threadRepo = threadRepo;
     }
 
-    public void save(Threads threads){
-        if(threads.getTitle() != null){
-            this.threadRepo.save(threads);
-        }
-    }
+//    public void save(Threads threads){
+//        if(threads.getTitle() != null){
+//            this.threadRepo.save(threads);
+//        }
+//    }
 }
