@@ -53,9 +53,9 @@
 <div class="container">
     <div class="row mb-3 text-center mt-3">
         <div class="col-md-7 themed-grid-col alert alert-danger">
-            <button class="btn btn-success" id="add_theme" data-bs-toggle="modal" data-bs-target="#themeModal">Создать тему</button>
-            <button class="btn btn-success" id="add_group" data-bs-toggle="modal" data-bs-target="#groupModal">Создать группу</button>
-            <button class="btn btn-success" id="add_thread" data-bs-toggle="modal" data-bs-target="#threadModal">Создать тред</button>
+            <button class="btn btn-success" id="add_theme" data-bs-toggle="modal" data-bs-target="#themeModal" sec:authorize="hasRole('ROLE_ADMIN')">Создать тему</button>
+            <button class="btn btn-success" id="add_group" data-bs-toggle="modal" data-bs-target="#groupModal" sec:authorize="hasRole('ROLE_ADMIN')">Создать группу</button>
+<!--            <button class="btn btn-success" id="add_thread" data-bs-toggle="modal" data-bs-target="#threadModal">Создать тред</button>-->
 
             <div th:each="theme: ${allThemes}">
                 <h3 th:value="${theme.getId()}" th:text="${theme.getName()}"></h3>
