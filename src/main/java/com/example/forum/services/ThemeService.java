@@ -28,8 +28,6 @@ public class ThemeService {
         return theme.orElse(new Themes());
     }
 
-
-
     public List<Themes> allThemes() {
         return themeRepo.findAll();
     }
