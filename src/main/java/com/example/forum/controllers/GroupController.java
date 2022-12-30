@@ -36,6 +36,7 @@ public class GroupController {
     private String getGroup(Model model, @RequestParam Long id){
         Groups groups = groupService.findGroupById(id);
         model.addAttribute("groupContent", groups.getName());
+        model.addAttribute("getId", groups.getId());
         return "groups";
     }
 }
