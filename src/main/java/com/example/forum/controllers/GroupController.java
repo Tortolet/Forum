@@ -5,6 +5,7 @@ import com.example.forum.models.Themes;
 import com.example.forum.repos.GroupRepo;
 import com.example.forum.services.GroupService;
 import com.example.forum.services.ThemeService;
+import com.example.forum.services.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,9 @@ public class GroupController {
     @Autowired
     private ThemeService themeService;
 
+    @Autowired
+    private ThreadService threadService;
+
     @PostMapping("/addGroup")
     private String addGroup(@RequestParam String groupName, @RequestParam Long themesId){
         Groups groups = new Groups();
@@ -37,6 +41,8 @@ public class GroupController {
         Groups groups = groupService.findGroupById(id);
         model.addAttribute("groupContent", groups.getName());
         model.addAttribute("getId", groups.getId());
+        model.addAttribute("threads", threadService.allThreads());
+        model.addAttribute("group", groups);
         return "groups";
     }
 }
