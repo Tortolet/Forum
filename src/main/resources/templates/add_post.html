@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>Главная страница</title>
 </head>
-<script src="/js/checking.js"></script>
+<script src="/js/addingPost.js"></script>
 <header class="p-3 text-bg-dark">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -46,22 +46,21 @@
 <body>
 <div class="container">
     <form th:action="@{/addPost}" method="post">
-        <div class="textBox">
+        <div class="textBox mt-3">
             <label for="Title">Заголовок</label>
-            <input class="form-control" id="Title" type="text" name="title"/>
+            <input class="form-control" id="Title" type="text" name="title" required/>
         </div>
-        <div class="textArea">
+        <div class="textArea mt-3">
             <label for="TextArea"> Описание
-                <textarea id="TextArea" class="form-control" name="content"></textarea>
+                <textarea id="TextArea" class="form-control" name="content" required></textarea>
             </label>
         </div>
-        <div class="butSuc">
+        <div class="butSuc mt-3">
             <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="username"/>
             <input type="hidden" th:value="${getId}" name="id"/>
-            <input type="submit" class="btn btn-success"/>
+            <input type="submit" class="btn btn-success" id="buttonSuccessPost"/>
         </div>
     </form>
-    <p th:text="${getId}"></p>
 </div>
 </body>
 </html>

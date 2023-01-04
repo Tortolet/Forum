@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -25,34 +26,15 @@ public class ThreadController {
     @Autowired
     private UserRepo userRepo;
 
-//    @GetMapping("/group/add_post")
-//    private String getAddPost(Model model, @RequestParam Long id, @RequestParam String title, @RequestParam String desc){
-////        Users userInDB = userRepo.findByUsername(user.getUsername());
-////        Groups groupInDB = groupService.findGroupById(id);
-////        Threads threads = new Threads();
-////
-////        threads.setGroups(groupInDB);
-////        threads.setUsers(userInDB);
-////
-////        threads.setPin(false);
-////
-////        threads.setTitle(title);
-////        threads.setContent(desc);
-////
-////        threadService.save(threads);
-////
-////        return "add_post";
-//    }
-
     @GetMapping("/group/add_post")
-    private String getPost(Model model, @RequestParam Long id){
+    public String getPost(Model model, @RequestParam Long id){
         Groups groups = groupService.findGroupById(id);
         model.addAttribute("getId", groups.getId());
         return "add_post";
     }
 
     @PostMapping("addPost")
-    private String postPost(@RequestParam Long id, @RequestParam String title, @RequestParam String content, @RequestParam String username){
+    public String postPost(@RequestParam Long id, @RequestParam String title, @RequestParam String content, @RequestParam String username){
         Users userInDB = userRepo.findByUsername(username);
         Groups groupInDB = groupService.findGroupById(id);
         Threads threads = new Threads();
@@ -68,5 +50,12 @@ public class ThreadController {
         threadService.save(threads);
 
         return "redirect:/group?id=" + id;
+    }
+
+    @GetMapping("/group/{groupId}/post")
+    public String showPost(Model model, @PathVariable Long groupId, @RequestParam Long id){
+        Threads post = threadService.findThreadById(id);
+        model.addAttribute("thread", post);
+        return "post";
     }
 }

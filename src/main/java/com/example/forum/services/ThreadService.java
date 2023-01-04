@@ -7,6 +7,7 @@ import com.example.forum.repos.ThreadRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ThreadService {
@@ -21,6 +22,11 @@ public class ThreadService {
         if(threads.getTitle() != null){
             this.threadRepo.save(threads);
         }
+    }
+
+    public Threads findThreadById(Long threadId) {
+        Optional<Threads> thread = threadRepo.findById(threadId);
+        return thread.orElse(new Threads());
     }
 
     public List<Threads> allThreads() {
