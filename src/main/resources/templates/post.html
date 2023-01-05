@@ -47,6 +47,8 @@
   <h1 th:text="${thread.getTitle()}" class="mt-3"></h1>
   <p th:text="'Автор: ' + ${thread.getUsers().getUsername()}" class="mt-3"></p>
   <p th:text="${thread.getContent()}" class="mt-5"></p>
+  <hr class="hr mt-3" />
+  <h1 class="mt-3">Комментарии</h1>
 </div>
 </body>
 </html>
