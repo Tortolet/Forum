@@ -39,7 +39,7 @@ public class GroupController {
         Groups groups = groupService.findGroupById(id);
         model.addAttribute("groupContent", groups.getName());
         model.addAttribute("getId", groups.getId());
-        model.addAttribute("threads", threadService.allThreads());
+        model.addAttribute("threads", threadService.allThreadsOrderBy());
         model.addAttribute("group", groups);
         return "groups";
     }

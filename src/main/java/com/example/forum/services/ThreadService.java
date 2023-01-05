@@ -32,4 +32,8 @@ public class ThreadService {
     public List<Threads> allThreads() {
         return threadRepo.findAll();
     }
+
+    public List<Threads> allThreadsOrderBy() {
+        return threadRepo.findAllByOrderByIdDesc(); // выводит сначала новые записи
+    }
 }

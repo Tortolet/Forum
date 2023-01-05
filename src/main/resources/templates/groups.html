@@ -62,9 +62,18 @@
   <div class="group-name">
     <h3 class="mt-3" th:text="${groupContent}"></h3>
   </div>
+  <div class="threadInfoPin">
+    <div th:each="thread : ${threads}">
+      <div th:if="${thread.getGroups() == group && thread.isPin() == true}" class="alert alert-success mt-3">
+        <a th:href="@{'/group/' + ${getId} + '/post?id=' + ${thread.getId()}}"><h2 th:text="${thread.getTitle()} + ' ' +'&#128204'" ></h2></a>
+        <p th:text="${thread.getContent()}" ></p>
+        <p th:text="'Автор: ' + ${thread.getUsers().getUsername()}"></p>
+      </div>
+    </div>
+  </div>
   <div class="threadInfo">
     <div th:each="thread : ${threads}">
-      <div th:if="${thread.getGroups() == group}" class="alert alert-info mt-3">
+      <div th:if="${thread.getGroups() == group && thread.isPin() == false}" class="alert alert-info mt-3">
         <a th:href="@{'/group/' + ${getId} + '/post?id=' + ${thread.getId()}}"><h2 th:text="${thread.getTitle()}" id="title"></h2></a>
         <p th:text="${thread.getContent()}" id="content"></p>
         <p th:text="'Автор: ' + ${thread.getUsers().getUsername()}"></p>
