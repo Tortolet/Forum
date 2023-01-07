@@ -49,7 +49,10 @@ public class ThreadController {
 
         threadService.save(threads);
 
-        return "redirect:/group?id=" + id;
+//        return "redirect:/group?id=" + id;
+
+        //noinspection SpringMVCViewInspection
+        return "redirect:/group/" + id + "/post?id=" + threads.getId();
     }
 
     @GetMapping("/group/{groupId}/post")
