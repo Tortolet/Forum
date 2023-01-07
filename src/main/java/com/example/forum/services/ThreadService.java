@@ -36,4 +36,8 @@ public class ThreadService {
     public List<Threads> allThreadsOrderBy() {
         return threadRepo.findAllByOrderByIdDesc(); // выводит сначала новые записи
     }
+
+    public long getUserPostsCount(Long userId){
+        return threadRepo.countFirstBy(userId);
+    }
 }
