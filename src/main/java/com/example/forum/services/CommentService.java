@@ -22,6 +22,6 @@ public class CommentService {
     }
 
     public List<Comments> allThreadsOrderByIdThread(long id) {
-        return commentRepo.findByThreads_Id(id); // выводит сначала новые записи
+        return commentRepo.findByThreads_IdOrderByIdDesc(id); // выводит сначала новые записи
     }
 }

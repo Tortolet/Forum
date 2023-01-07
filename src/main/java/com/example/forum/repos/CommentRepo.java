@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface CommentRepo extends JpaRepository<Comments, Long> {
-    List<Comments> findByThreads_Id(Long id);
+    List<Comments> findByThreads_IdOrderByIdDesc(Long id);
 }
