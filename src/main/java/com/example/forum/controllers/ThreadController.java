@@ -1,9 +1,11 @@
 package com.example.forum.controllers;
 
+import com.example.forum.models.Comments;
 import com.example.forum.models.Groups;
 import com.example.forum.models.Threads;
 import com.example.forum.models.Users;
 import com.example.forum.repos.UserRepo;
+import com.example.forum.services.CommentService;
 import com.example.forum.services.GroupService;
 import com.example.forum.services.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class ThreadController {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/group/add_post")
     public String getPost(Model model, @RequestParam Long id){
@@ -59,6 +64,40 @@ public class ThreadController {
     public String showPost(Model model, @PathVariable Long groupId, @RequestParam Long id){
         Threads post = threadService.findThreadById(id);
         model.addAttribute("thread", post);
+        model.addAttribute("comments", commentService.allThreadsOrderByIdThread(id));
         return "post";
+    }
+
+    @PostMapping("/pin")
+    public String pinPost(@RequestParam Long id){
+        Threads threads = threadService.findThreadById(id);
+        long groupId = threads.getGroups().getId();
+        threads.setPin(true);
+        threadService.save(threads);
+        return "redirect:/group?id=" + groupId;
+    }
+
+    @PostMapping("/unpin")
+    public String unpinPost(@RequestParam Long id){
+        Threads threads = threadService.findThreadById(id);
+        long groupId = threads.getGroups().getId();
+        threads.setPin(false);
+        threadService.save(threads);
+        return "redirect:/group?id=" + groupId;
+    }
+
+    @PostMapping("comment")
+    public String addComment(@RequestParam Long threadId, @RequestParam String username, @RequestParam String content){
+        Threads threadInDB = threadService.findThreadById(threadId);
+        Users userInDB = userRepo.findByUsername(username);
+        Comments comments = new Comments();
+
+        comments.setThreads(threadInDB);
+        comments.setUsers(userInDB);
+        comments.setContent(content);
+
+        commentService.save(comments);
+
+        return "redirect:/group/" + threadInDB.getGroups().getId() + "/post?id=" + threadInDB.getId();
     }
 }

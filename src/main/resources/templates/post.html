@@ -52,15 +52,23 @@
     <h1 class="mt-3">Комментарии</h1>
     <div class="comments_add">
 <!--      Добавить action форме-->
-      <form>
+      <form th:action="@{/comment}" method="post">
         <div class="comment_textArea_div mt-3">
           <label for="comment_textArea">Оставить комментарий</label>
-          <textarea id="comment_textArea" class="form-control" required></textarea>
+          <textarea id="comment_textArea" class="form-control" name="content" required></textarea>
         </div>
         <div class="comment_success_div mt-3">
+          <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="username"/>
+          <input type="hidden" th:value="${thread.getId()}" name="threadId"/>
           <input type="submit" class="btn btn-success" id="comment_success"/>
         </div>
       </form>
+    </div>
+    <div class="comments_body" th:each="coms : ${comments}">
+      <div class="alert alert-info mt-3">
+        <h1 th:text="${coms.getUsers().getUsername()}"></h1>
+        <p th:text="${coms.getContent()}"></p>
+      </div>
     </div>
   </div>
 </div>

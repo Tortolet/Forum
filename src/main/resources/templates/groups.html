@@ -65,6 +65,10 @@
   <div class="threadInfoPin">
     <div th:each="thread : ${threads}">
       <div th:if="${thread.getGroups() == group && thread.isPin() == true}" class="alert alert-success mt-3">
+        <form th:action="@{/unpin}" method="post">
+          <input type="hidden" th:value="${thread.getId()}" name="id">
+          <input type="submit" class="btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:value="'&#10006'"/>
+        </form>
         <a th:href="@{'/group/' + ${getId} + '/post?id=' + ${thread.getId()}}"><h2 th:text="${thread.getTitle()} + ' ' +'&#128204'" ></h2></a>
         <p th:text="${thread.getContent()}" ></p>
         <p th:text="'Автор: ' + ${thread.getUsers().getUsername()}"></p>
@@ -74,6 +78,10 @@
   <div class="threadInfo">
     <div th:each="thread : ${threads}">
       <div th:if="${thread.getGroups() == group && thread.isPin() == false}" class="alert alert-info mt-3">
+        <form th:action="@{/pin}" method="post">
+          <input type="hidden" th:value="${thread.getId()}" name="id">
+          <input type="submit" class="btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:value="'&#128204'"/>
+        </form>
         <a th:href="@{'/group/' + ${getId} + '/post?id=' + ${thread.getId()}}"><h2 th:text="${thread.getTitle()}" id="title"></h2></a>
         <p th:text="${thread.getContent()}" id="content"></p>
         <p th:text="'Автор: ' + ${thread.getUsers().getUsername()}"></p>
