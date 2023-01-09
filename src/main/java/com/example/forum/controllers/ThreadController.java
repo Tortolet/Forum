@@ -25,7 +25,7 @@ import java.util.Objects;
 @Controller
 public class ThreadController {
 
-    public static String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/images";
+    public static String uploadDir = System.getProperty("user.dir") + "/upload";
 
     @Autowired
     private ThreadService threadService;
