@@ -24,4 +24,12 @@ public class CommentService {
     public List<Comments> allThreadsOrderByIdThread(long id) {
         return commentRepo.findByThreads_IdOrderByIdDesc(id); // выводит сначала новые записи
     }
+
+    public List<Comments> allComments() {
+        return commentRepo.findAll();
+    }
+
+    public long getUserCommentsCount(Long userId){
+        return commentRepo.countFirstBy(userId);
+    }
 }

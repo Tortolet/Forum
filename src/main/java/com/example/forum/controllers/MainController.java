@@ -1,10 +1,7 @@
 package com.example.forum.controllers;
 
 import com.example.forum.models.Users;
-import com.example.forum.services.GroupService;
-import com.example.forum.services.ThemeService;
-import com.example.forum.services.ThreadService;
-import com.example.forum.services.UserService;
+import com.example.forum.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +21,9 @@ public class MainController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/")
     public String index(Model model){
@@ -46,6 +46,22 @@ public class MainController {
 
             model.addAttribute("maxPosts", max);
             model.addAttribute("nameOfMaxPostsUser", usersMaxPosts.getUsername());
+        }
+
+        if(commentService.allComments().size() - 1 > 0){
+            int com_max = Integer.MIN_VALUE;
+            long com_local = 0;
+            for (long i = 0; i <= userService.allUsers().size(); i++) {
+                com_max = (int) Math.max(com_max, commentService.getUserCommentsCount(i));
+
+                if(com_max == commentService.getUserCommentsCount(i)){
+                    com_local = i;
+                }
+            }
+            Users usersMaxComments = userService.findUserById(com_local);
+
+            model.addAttribute("maxComments", com_max);
+            model.addAttribute("nameOfMaxCommentsUser", usersMaxComments.getUsername());
         }
 
         return "index";
