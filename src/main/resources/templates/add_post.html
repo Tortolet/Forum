@@ -45,7 +45,7 @@
 </header>
 <body>
 <div class="container">
-    <form th:action="@{/addPost}" method="post">
+    <form th:action="@{/addPost}" method="post" enctype="multipart/form-data">
         <div class="textBox mt-3">
             <label for="Title">Заголовок</label>
             <input class="form-control" id="Title" type="text" name="title" required/>
@@ -59,7 +59,7 @@
             <input type="hidden" th:value="${getId}" name="id"/>
             <div class="row g-2">
                 <div class="col-auto">
-                    <input type="file" class="form-control"  multiple>
+                    <input type="file" class="form-control" name="files" multiple>
                 </div>
                 <div class="col-auto">
                     <input type="submit" class="btn btn-success" id="buttonSuccessPost"/>
