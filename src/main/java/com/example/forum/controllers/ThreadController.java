@@ -1,6 +1,9 @@
 package com.example.forum.controllers;
 
-import com.example.forum.models.*;
+import com.example.forum.models.Comments;
+import com.example.forum.models.Groups;
+import com.example.forum.models.Threads;
+import com.example.forum.models.Users;
 import com.example.forum.repos.FileRepo;
 import com.example.forum.repos.UserRepo;
 import com.example.forum.services.CommentService;
@@ -8,6 +11,8 @@ import com.example.forum.services.FilesService;
 import com.example.forum.services.GroupService;
 import com.example.forum.services.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +25,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Controller
 public class ThreadController {
@@ -94,9 +101,15 @@ public class ThreadController {
     @GetMapping("/group/{groupId}/post")
     public String showPost(Model model, @PathVariable Long groupId, @RequestParam Long id){
         Threads post = threadService.findThreadById(id);
+        Set<Users> usersSet = new HashSet<>();
         model.addAttribute("thread", post);
         model.addAttribute("comments", commentService.allThreadsOrderByIdThread(id));
         model.addAttribute("files", filesService.allFiles());
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users user = userRepo.findByUsername(auth.getName());
+        usersSet.add(user);
+        model.addAttribute("userSet", usersSet);
         return "post";
     }
 
@@ -131,5 +144,29 @@ public class ThreadController {
         commentService.save(comments);
 
         return "redirect:/group/" + threadInDB.getGroups().getId() + "/post?id=" + threadInDB.getId();
+    }
+
+    @PostMapping("/likePost")
+    public String likePost(@RequestParam Long postId, @RequestParam String username) {
+        Users user = userRepo.findByUsername(username);
+        Threads post = threadService.findThreadById(postId);
+
+        user.addThread(post);
+
+        userRepo.save(user);
+
+        return "redirect:/group/" + post.getGroups().getId() + "/post?id=" + post.getId();
+    }
+
+    @PostMapping("/dislikePost")
+    public String dislikePost(@RequestParam Long postId, @RequestParam String username) {
+        Users user = userRepo.findByUsername(username);
+        Threads post = threadService.findThreadById(postId);
+
+        user.removeThread(post);
+
+        userRepo.save(user);
+
+        return "redirect:/group/" + post.getGroups().getId() + "/post?id=" + post.getId();
     }
 }

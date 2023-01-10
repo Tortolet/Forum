@@ -25,7 +25,7 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Set<Roles> roles;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "users_comments_likes",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -33,7 +33,7 @@ public class Users {
     )
     private Set<Comments> comments = new HashSet<>();
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "users_threads_likes",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -42,6 +42,14 @@ public class Users {
     private Set<Threads> threads = new HashSet<>();
 
     public Users() {
+    }
+
+    public void addThread(Threads threads){
+        this.threads.add(threads);
+    }
+
+    public void removeThread(Threads threads){
+        this.threads.remove(threads);
     }
 
     public Long getId() {

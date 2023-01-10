@@ -68,9 +68,11 @@
         <div class="col-md-4 ms-4 themed-grid-col alert alert-info">
             <p>Интересная информация</p>
             <b>Последний тред:</b>
-            <a th:href="@{'/group/' + ${lastThread.getGroups().getId()} + '/post?id=' + ${lastThread.getId()}}">
-                <h1 th:text="${lastThread.getTitle()}"></h1>
-            </a>
+            <div th:if="${lastThread != null}">
+                <a th:href="@{'/group/' + ${lastThread.getGroups().getId()} + '/post?id=' + ${lastThread.getId()}}">
+                    <h1 th:text="${lastThread.getTitle()}"></h1>
+                </a>
+            </div>
             <b>Больше всего постов:</b>
             <div th:if="${nameOfMaxPostsUser != null}">
                 <h1 th:text="${nameOfMaxPostsUser} + ': ' + ${maxPosts}"></h1>

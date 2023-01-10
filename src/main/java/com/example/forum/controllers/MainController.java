@@ -29,7 +29,7 @@ public class MainController {
     public String index(Model model){
         model.addAttribute("allThemes", themeService.allThemes());
         model.addAttribute("allGroups", groupService.allThemes());
-        if(threadService.allThreads().size() - 1 > 0)
+        if(threadService.allThreads().size() > 0)
             model.addAttribute("lastThread", threadService.allThreads().get(threadService.allThreads().size() - 1)); // Last thread
 
         if(threadService.allThreads().size() > 0) { // Расчет у кого больше всего постов и имя пользователя с большим количеством постов
