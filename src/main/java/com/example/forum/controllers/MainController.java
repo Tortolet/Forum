@@ -32,7 +32,7 @@ public class MainController {
         if(threadService.allThreads().size() - 1 > 0)
             model.addAttribute("lastThread", threadService.allThreads().get(threadService.allThreads().size() - 1)); // Last thread
 
-        if(threadService.allThreads().size() - 1 > 0) { // Расчет у кого больше всего постов и имя пользователя с большим количеством постов
+        if(threadService.allThreads().size() > 0) { // Расчет у кого больше всего постов и имя пользователя с большим количеством постов
             int max = Integer.MIN_VALUE;
             long local = 0;
             for(long i = 1; i <= userService.allUsers().size(); i++){
@@ -48,7 +48,7 @@ public class MainController {
             model.addAttribute("nameOfMaxPostsUser", usersMaxPosts.getUsername());
         }
 
-        if(commentService.allComments().size() - 1 > 0){
+        if(commentService.allComments().size() > 0){
             int com_max = Integer.MIN_VALUE;
             long com_local = 0;
             for (long i = 0; i <= userService.allUsers().size(); i++) {

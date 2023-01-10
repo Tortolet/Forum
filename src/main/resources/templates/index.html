@@ -72,9 +72,13 @@
                 <h1 th:text="${lastThread.getTitle()}"></h1>
             </a>
             <b>Больше всего постов:</b>
-            <h1 th:text="${nameOfMaxPostsUser} + ': ' + ${maxPosts}"></h1>
+            <div th:if="${nameOfMaxPostsUser != null}">
+                <h1 th:text="${nameOfMaxPostsUser} + ': ' + ${maxPosts}"></h1>
+            </div>
             <b>Больше всего комментариев:</b>
-            <h1 th:text="${nameOfMaxCommentsUser} + ': ' + ${maxComments}"></h1>
+            <div th:if="${nameOfMaxCommentsUser != null}">
+                <h1 th:text="${nameOfMaxCommentsUser} + ': ' + ${maxComments}"></h1>
+            </div>
         </div>
     </div>
 </div>
