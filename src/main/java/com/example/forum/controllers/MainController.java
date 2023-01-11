@@ -1,6 +1,7 @@
 package com.example.forum.controllers;
 
 import com.example.forum.models.Users;
+import com.example.forum.repos.UserRepo;
 import com.example.forum.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,10 +24,13 @@ public class MainController {
     private UserService userService;
 
     @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
     private CommentService commentService;
 
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model) {
         model.addAttribute("allThemes", themeService.allThemes());
         model.addAttribute("allGroups", groupService.allThemes());
         if(threadService.allThreads().size() > 0)
@@ -64,6 +68,8 @@ public class MainController {
             model.addAttribute("nameOfMaxCommentsUser", usersMaxComments.getUsername());
         }
 
+        if(userRepo.showMaxLikePost() != null)
+            model.addAttribute("maxLikePost", threadService.findThreadById(Long.valueOf(userRepo.showMaxLikePost())));
         return "index";
     }
 }
