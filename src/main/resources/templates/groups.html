@@ -65,7 +65,7 @@
   <div class="threadInfoPin">
     <div th:each="thread : ${threads}">
       <div th:if="${thread.getGroups() == group && thread.isPin() == true}" class="alert alert-success mt-3">
-        <form th:action="@{/unpin}" method="post">
+        <form th:action="@{/unpin}" method="post" sec:authorize="hasRole('ROLE_ADMIN')">
           <input type="hidden" th:value="${thread.getId()}" name="id">
           <input type="submit" class="btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:value="'&#10006'"/>
         </form>
@@ -78,7 +78,7 @@
   <div class="threadInfo">
     <div th:each="thread : ${threads}">
       <div th:if="${thread.getGroups() == group && thread.isPin() == false}" class="alert alert-info mt-3">
-        <form th:action="@{/pin}" method="post">
+        <form th:action="@{/pin}" method="post" sec:authorize="hasRole('ROLE_ADMIN')">
           <input type="hidden" th:value="${thread.getId()}" name="id">
           <input type="submit" class="btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:value="'&#128204'"/>
         </form>
