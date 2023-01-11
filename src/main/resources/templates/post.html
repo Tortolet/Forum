@@ -64,14 +64,14 @@
       <form th:action="@{/likePost}" method="post">
         <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="username"/>
         <input type="hidden" th:value="${thread.getId()}" name="postId"/>
-        <input type="submit" class="btn" th:value="'&#129293'"/>
+        <input type="submit" class="btn" th:value="'&#129293' + ' ' +${countLikes}"/>
       </form>
     </div>
     <div th:if="${thread.getUsersCom().containsAll(userSet)}">
       <form th:action="@{/dislikePost}" method="post">
         <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="username"/>
         <input type="hidden" th:value="${thread.getId()}" name="postId"/>
-        <input type="submit" class="btn" th:value="'&#128150'"/>
+        <input type="submit" class="btn" th:value="'&#128150' + ' ' +${countLikes}"/>
       </form>
     </div>
   </div>

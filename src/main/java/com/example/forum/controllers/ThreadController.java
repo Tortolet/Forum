@@ -110,6 +110,8 @@ public class ThreadController {
         Users user = userRepo.findByUsername(auth.getName());
         usersSet.add(user);
         model.addAttribute("userSet", usersSet);
+
+        model.addAttribute("countLikes", userRepo.countByThreads(post));
         return "post";
     }
 
