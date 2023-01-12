@@ -205,4 +205,17 @@ public class ThreadController {
 
         return "redirect:/group/" + post.getGroups().getId() + "/post?id=" + post.getId();
     }
+
+    @PostMapping("/updatePost")
+    public String updateString(@RequestParam Long postId, @RequestParam String title, @RequestParam String content){
+        Threads post = threadService.findThreadById(postId);
+
+        post.setTitle(title);
+        post.setContent(content);
+        post.setDateChange(new Date(System.currentTimeMillis()));
+
+        threadService.save(post);
+
+        return "redirect:/group/" + post.getGroups().getId() + "/post?id=" + post.getId();
+    }
 }

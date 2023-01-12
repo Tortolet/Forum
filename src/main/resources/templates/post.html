@@ -44,11 +44,19 @@
 </header>
 <body>
 <div class="container">
-  <div class="mt-3">
+  <div class="mt-3 mb-3">
     <a th:href="${'/group?id=' + thread.getGroups().getId()}"><<</a>
   </div>
-  <h1 th:text="${thread.getTitle()}" class="mt-3"></h1>
-  <p th:text="'Автор: ' + ${thread.getUsers().getUsername()}" class="mt-3"></p>
+  <span th:if="${thread.isPin()}" class="badge rounded-pill text-bg-danger" style="--bs-badge-font-size: 1rem;" th:text="'Закреплено'"></span>
+  <div class="row">
+    <div class="col-auto">
+      <h1 th:text="${thread.getTitle()}"></h1>
+    </div>
+    <div class="col-auto" th:if="${#httpServletRequest.remoteUser == thread.getUsers().getUsername()}">
+      <button class="btn mt-sm-2" th:text="'&#9999'" data-bs-toggle="modal" data-bs-target="#updateModal"></button>
+    </div>
+  </div>
+  <p th:text="'Автор: ' + ${thread.getUsers().getUsername()}" class=""></p>
   <p th:text="${thread.getContent()}" class="mt-5"></p>
   <div class="row">
     <div class="col-2" th:each="file : ${files}" th:if="${file.getThreads() == thread}">
@@ -117,6 +125,34 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <form th:action="@{/updatePost}" method="post">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Обновление поста</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="title" class="form-label">Заголовок</label>
+            <input type="text" class="form-control" id="title" name="title" th:value="${thread.getTitle()}" required/>
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">Контент</label>
+            <textarea class="form-control" id="content" name="content" th:text="${thread.getContent()}" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+          <input type="hidden" th:value="${thread.getId()}" name="postId">
+          <input type="submit" id="buttonUpdate" class="btn btn-primary" value="Обновить"/>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
 </body>
 </html>
