@@ -59,7 +59,7 @@
       </div>
     </div>
   </div>
-  <div class="likes">
+  <div class="likes mt-3">
     <div th:if="!${thread.getUsersCom().containsAll(userSet)}">
       <form th:action="@{/likePost}" method="post">
         <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="username"/>
@@ -96,6 +96,24 @@
       <div class="alert alert-info mt-3">
         <h1 th:text="${coms.getUsers().getUsername()}"></h1>
         <p th:text="${coms.getContent()}"></p>
+        <div class="likes_comments">
+          <div th:if="!${coms.getUsersCom().containsAll(userSet)}">
+            <form th:action="@{/likeComment}" method="post">
+              <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="username"/>
+              <input type="hidden" th:value="${thread.getId()}" name="postId"/>
+              <input type="hidden" th:value="${coms.getId()}" name="commentId"/>
+              <input type="submit" class="btn" th:value="'&#129293 ' + ${test.get(coms)}"/>
+            </form>
+          </div>
+          <div th:if="${coms.getUsersCom().containsAll(userSet)}">
+            <form th:action="@{/dislikeComment}" method="post">
+              <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="username"/>
+              <input type="hidden" th:value="${thread.getId()}" name="postId"/>
+              <input type="hidden" th:value="${coms.getId()}" name="commentId"/>
+              <input type="submit" class="btn" th:value="'&#128150 ' + ${test.get(coms)}"/>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -52,6 +52,15 @@ public class Users {
         this.threads.remove(threads);
     }
 
+    public void addComment(Comments comments){
+        this.comments.add(comments);
+    }
+
+    public void removeComment(Comments comments){
+        this.comments.remove(comments);
+
+    }
+
     public Long getId() {
         return id;
     }

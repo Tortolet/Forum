@@ -25,9 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class ThreadController {
@@ -112,6 +110,16 @@ public class ThreadController {
         model.addAttribute("userSet", usersSet);
 
         model.addAttribute("countLikes", userRepo.countByThreads(post));
+
+        Map<Comments, Long> test = new HashMap<>();
+        if(commentService.allThreadsOrderByIdThread(id).size() > 0){
+            long temp;
+            for(int i = 0; i < commentService.allThreadsOrderByIdThread(id).size(); i++){
+                temp = userRepo.countByComments(commentService.allThreadsOrderByIdThread(id).get(i));
+                test.put(commentService.allThreadsOrderByIdThread(id).get(i), temp);
+            }
+        }
+        model.addAttribute("test", test);
         return "post";
     }
 
@@ -166,6 +174,32 @@ public class ThreadController {
         Threads post = threadService.findThreadById(postId);
 
         user.removeThread(post);
+
+        userRepo.save(user);
+
+        return "redirect:/group/" + post.getGroups().getId() + "/post?id=" + post.getId();
+    }
+
+    @PostMapping("/likeComment")
+    public String likeComment(@RequestParam Long postId, @RequestParam String username, @RequestParam Long commentId){
+        Users user = userRepo.findByUsername(username);
+        Threads post = threadService.findThreadById(postId);
+        Comments comments = commentService.findCommentById(commentId);
+
+        user.addComment(comments);
+
+        userRepo.save(user);
+
+        return "redirect:/group/" + post.getGroups().getId() + "/post?id=" + post.getId();
+    }
+
+    @PostMapping("/dislikeComment")
+    public String dislikeComment(@RequestParam Long postId, @RequestParam String username, @RequestParam Long commentId){
+        Users user = userRepo.findByUsername(username);
+        Threads post = threadService.findThreadById(postId);
+        Comments comments = commentService.findCommentById(commentId);
+
+        user.removeComment(comments);
 
         userRepo.save(user);
 

@@ -5,6 +5,7 @@ import com.example.forum.repos.CommentRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentService {
@@ -31,5 +32,10 @@ public class CommentService {
 
     public long getUserCommentsCount(Long userId){
         return commentRepo.countFirstBy(userId);
+    }
+
+    public Comments findCommentById(Long commentId) {
+        Optional<Comments> comments = commentRepo.findById(commentId);
+        return comments.orElse(new Comments());
     }
 }
