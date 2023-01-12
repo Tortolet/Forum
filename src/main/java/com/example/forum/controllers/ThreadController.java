@@ -207,11 +207,12 @@ public class ThreadController {
     }
 
     @PostMapping("/updatePost")
-    public String updateString(@RequestParam Long postId, @RequestParam String title, @RequestParam String content){
+    public String updateString(@RequestParam Long postId, @RequestParam String title, @RequestParam String content, @RequestParam(defaultValue = "false") boolean pin){
         Threads post = threadService.findThreadById(postId);
 
         post.setTitle(title);
         post.setContent(content);
+        post.setPin(pin);
         post.setDateChange(new Date(System.currentTimeMillis()));
 
         threadService.save(post);
