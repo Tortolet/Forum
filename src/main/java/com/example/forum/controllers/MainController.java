@@ -39,11 +39,11 @@ public class MainController {
         if(threadService.allThreads().size() > 0) { // Расчет у кого больше всего постов и имя пользователя с большим количеством постов
             int max = Integer.MIN_VALUE;
             long local = 0;
-            for(long i = 1; i <= userService.allUsers().size(); i++){
-                max = (int) Math.max(max, threadService.getUserPostsCount(i));
+            for(int i = 0; i < userService.allUsers().size(); i++){
+                max = (int) Math.max(max, threadService.getUserPostsCount(userService.allUsers().get(i).getId()));
 
-                if(max == threadService.getUserPostsCount(i)) {
-                    local = i;
+                if(max == threadService.getUserPostsCount(userService.allUsers().get(i).getId())) {
+                    local = userService.allUsers().get(i).getId();
                 }
             }
             Users usersMaxPosts = userService.findUserById(local);
@@ -55,11 +55,11 @@ public class MainController {
         if(commentService.allComments().size() > 0){
             int com_max = Integer.MIN_VALUE;
             long com_local = 0;
-            for (long i = 0; i <= userService.allUsers().size(); i++) {
-                com_max = (int) Math.max(com_max, commentService.getUserCommentsCount(i));
+            for (int i = 0; i < userService.allUsers().size(); i++) {
+                com_max = (int) Math.max(com_max, commentService.getUserCommentsCount(userService.allUsers().get(i).getId()));
 
-                if(com_max == commentService.getUserCommentsCount(i)){
-                    com_local = i;
+                if(com_max == commentService.getUserCommentsCount(userService.allUsers().get(i).getId())){
+                    com_local = userService.allUsers().get(i).getId();
                 }
             }
             Users usersMaxComments = userService.findUserById(com_local);

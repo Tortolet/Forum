@@ -6,7 +6,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   <script src="/js/updatePost.js"></script>
   <meta charset="UTF-8">
-  <title>Главная страница</title>
+  <title th:text="${thread.getTitle()}"></title>
 </head>
 <header class="p-3 text-bg-dark">
   <div class="container">
@@ -14,11 +14,7 @@
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li><a th:href="@{/}" class="nav-link px-2 text-white">Главная</a></li>
-        <li><a href="#" class="nav-link px-2 text-white">Пользователи</a></li>
-        <!--                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>-->
-        <!--                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>-->
-        <!--                <li><a href="#" class="nav-link px-2 text-white">About</a></li>-->
-
+        <li><a th:href="@{/users}" class="nav-link px-2 text-white">Пользователи</a></li>
       </ul>
       <div class="text-end">
         <ul class="nav">
@@ -68,6 +64,10 @@
       </div>
     </div>
   </div>
+  <div class="dates mt-3">
+    <p th:text="'Создано: ' + ${dateCreated}"></p>
+    <p th:if="!${dateCreated.equals(dateChange)}" th:text="'Изменено: ' + ${dateChange}"></p>
+  </div>
   <div class="likes mt-3">
     <div th:if="!${thread.getUsersCom().containsAll(userSet)}">
       <form th:action="@{/likePost}" method="post">
@@ -105,6 +105,9 @@
       <div class="alert alert-info mt-3">
         <h1 th:text="${coms.getUsers().getUsername()}"></h1>
         <p th:text="${coms.getContent()}"></p>
+        <div class="date_create">
+          <p th:text="${dateComment.get(coms)}"></p>
+        </div>
         <div class="likes_comments">
           <div th:if="!${coms.getUsersCom().containsAll(userSet)}">
             <form th:action="@{/likeComment}" method="post">

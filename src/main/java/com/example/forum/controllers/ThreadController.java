@@ -6,10 +6,7 @@ import com.example.forum.models.Threads;
 import com.example.forum.models.Users;
 import com.example.forum.repos.FileRepo;
 import com.example.forum.repos.UserRepo;
-import com.example.forum.services.CommentService;
-import com.example.forum.services.FilesService;
-import com.example.forum.services.GroupService;
-import com.example.forum.services.ThreadService;
+import com.example.forum.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,6 +46,9 @@ public class ThreadController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/group/add_post")
     public String getPost(Model model, @RequestParam Long id){
@@ -112,14 +112,45 @@ public class ThreadController {
         model.addAttribute("countLikes", userRepo.countByThreads(post));
 
         Map<Comments, Long> test = new HashMap<>();
+        Map<Comments, String> dateComment = new HashMap<>();
         if(commentService.allThreadsOrderByIdThread(id).size() > 0){
             long temp;
             for(int i = 0; i < commentService.allThreadsOrderByIdThread(id).size(); i++){
                 temp = userRepo.countByComments(commentService.allThreadsOrderByIdThread(id).get(i));
                 test.put(commentService.allThreadsOrderByIdThread(id).get(i), temp);
+
+                String dateCommentString = String.valueOf(commentService.allThreadsOrderByIdThread(id).get(i).getDateCreated());
+                StringBuilder dateBuilder = new StringBuilder(dateCommentString);
+                String dayComment = dateBuilder.substring(8,10);
+                String monthComment = dateBuilder.substring(5,7);
+                String yearComment = dateBuilder.substring(0,4);
+                String timeComment = dateBuilder.substring(11,19);
+
+                String resultDateComment = dayComment + "-" + monthComment + "-" + yearComment + " " + timeComment;
+                dateComment.put(commentService.allThreadsOrderByIdThread(id).get(i), resultDateComment);
             }
         }
         model.addAttribute("test", test);
+        model.addAttribute("dateComment", dateComment);
+
+        String dateCreated = String.valueOf(post.getDateCreated());
+        StringBuilder builder = new StringBuilder(dateCreated);
+        String day = builder.substring(8,10);
+        String month = builder.substring(5,7);
+        String year = builder.substring(0,4);
+        String time = builder.substring(11,19);
+        String resultDateCreated = day + "-" + month + "-" + year + " " + time;
+        model.addAttribute("dateCreated", resultDateCreated);
+
+        String dateChange = String.valueOf(post.getDateChange());
+        StringBuilder builderChange = new StringBuilder(dateChange);
+        String dayChange = builderChange.substring(8,10);
+        String monthChange = builderChange.substring(5,7);
+        String yearChange = builderChange.substring(0,4);
+        String timeChange = builderChange.substring(11,19);
+        String resultDateChange = dayChange + "-" + monthChange + "-" + yearChange + " " + timeChange;
+        model.addAttribute("dateChange", resultDateChange);
+
         return "post";
     }
 
@@ -218,5 +249,28 @@ public class ThreadController {
         threadService.save(post);
 
         return "redirect:/group/" + post.getGroups().getId() + "/post?id=" + post.getId();
+    }
+
+    @GetMapping("/users")
+    public String getUsers(Model model) {
+        model.addAttribute("users", userService.allUsers());
+        Map<Users, Long> usersThreadsMap = new HashMap<>();
+        Map<Users, Long> usersCommentsMap = new HashMap<>();
+
+        if(threadService.allThreads().size() > 0){
+            for (int i = 0; i < userService.allUsers().size(); i++) {
+                usersThreadsMap.put(userService.allUsers().get(i), threadService.getUserPostsCount(userService.allUsers().get(i).getId()));
+            }
+            model.addAttribute("threads", usersThreadsMap);
+        }
+
+        if(commentService.allComments().size() > 0){
+            for (int i = 0; i < userService.allUsers().size(); i++) {
+                usersCommentsMap.put(userService.allUsers().get(i), commentService.getUserCommentsCount(userService.allUsers().get(i).getId()));
+            }
+            model.addAttribute("comments", usersCommentsMap);
+        }
+
+        return "users";
     }
 }
