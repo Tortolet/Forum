@@ -73,6 +73,10 @@
     <div class="user_info mt-3">
         <b th:text="'Количество постов: ' + ${userCountPosts}"></b>
         <br><b th:text="'Количество комментариев: ' + ${userCountComments}"></b>
+        <div class="is_active mt-3">
+            <b th:if="${user.isActive()}" th:text="'Активен'" style="color: green"></b>
+            <b th:if="!${user.isActive()}" th:text="'Неактивен'" style="color: red"></b>
+        </div>
     </div>
     <hr class="hr mt-3" />
     <div class="posts mt-3">

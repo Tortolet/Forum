@@ -64,7 +64,7 @@
                 <p th:text="'Количество постов: ' + ${threads.get(user)}"></p>
                 <p th:text="'Количество комментариев: ' + ${comments.get(user)}"></p>
                 <div class="is_active">
-                  <b th:if="${user.isActive()}" th:text="'Актвен'" style="color: green"></b>
+                  <b th:if="${user.isActive()}" th:text="'Активен'" style="color: green"></b>
                   <b th:if="!${user.isActive()}" th:text="'Неактивен'" style="color: red"></b>
                 </div>
               </div>
