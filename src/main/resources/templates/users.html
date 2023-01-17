@@ -57,7 +57,7 @@
               <div class="roles">
                 <span th:if="${user.getRoles().contains(T(com.example.forum.models.Roles).ROLE_ADMIN)}" class="badge rounded-pill text-bg-danger" style="--bs-badge-font-size: 1rem;" th:text="'Администратор'"></span>
                 <span th:if="${user.getRoles().contains(T(com.example.forum.models.Roles).ROLE_USER)}" class="badge rounded-pill text-bg-primary" style="--bs-badge-font-size: 1rem;" th:text="'Пользователь'"></span>
-                <span th:if="${user.getRoles().contains(T(com.example.forum.models.Roles).ROLE_OPERATOR)}" class="badge rounded-pill text-bg-success" style="--bs-badge-font-size: 1rem;" th:text="'Оператор'"></span>
+                <span th:if="${user.getRoles().contains(T(com.example.forum.models.Roles).ROLE_OPERATOR)}" class="badge rounded-pill text-bg-success" style="--bs-badge-font-size: 1rem;" th:text="'Модератор'"></span>
               </div>
               <h1 th:text="${user.getUsername()}"></h1>
               <div class="thread_count">

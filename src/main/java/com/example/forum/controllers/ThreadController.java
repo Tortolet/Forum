@@ -4,7 +4,9 @@ import com.example.forum.models.Comments;
 import com.example.forum.models.Groups;
 import com.example.forum.models.Threads;
 import com.example.forum.models.Users;
+import com.example.forum.repos.CommentRepo;
 import com.example.forum.repos.FileRepo;
+import com.example.forum.repos.ThreadRepo;
 import com.example.forum.repos.UserRepo;
 import com.example.forum.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class ThreadController {
     private ThreadService threadService;
 
     @Autowired
+    private ThreadRepo threadRepo;
+
+    @Autowired
     private GroupService groupService;
 
     @Autowired
@@ -46,6 +51,9 @@ public class ThreadController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private CommentRepo commentRepo;
 
     @Autowired
     private UserService userService;
@@ -272,5 +280,26 @@ public class ThreadController {
         }
 
         return "users";
+    }
+
+    @PostMapping("/deletePost")
+    public String deletePost(@RequestParam Long postId){ // сделать можно через запросы из репозитория / сделать цикл из users с post
+        Threads post = threadService.findThreadById(postId);
+        List<Comments> comments = commentService.allThreadsOrderByIdThread(postId);
+        List<com.example.forum.models.Files> files = fileRepo.findByThreads(post);
+        // удаление лайков c комментариев
+        for (Comments comment : comments) {
+            userRepo.deleteLikesComment(comment.getId());
+        }
+        // удаление файлов
+        fileRepo.deleteAll(files);
+        // удаление лайков с поста
+        userRepo.deleteLikesPost(postId);
+        // удаление комментариев
+        commentRepo.deleteAll(comments);
+        // удаление поста
+        threadRepo.delete(post);
+
+        return "redirect:/group?id=" + post.getGroups().getId();
     }
 }
