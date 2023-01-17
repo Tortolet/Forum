@@ -60,21 +60,25 @@ public class UserController {
     @GetMapping("/user/{username}")
     public String getUser(Model model, @PathVariable String username){
         Users user = userRepo.findByUsername(username);
-        model.addAttribute("user", user);
+        if(user != null) {
+            model.addAttribute("user", user);
 
-        List<Threads> posts = threadRepo.findByUsers(user);
-        model.addAttribute("userPosts", posts);
+            List<Threads> posts = threadRepo.findByUsers(user);
+            model.addAttribute("userPosts", posts);
 
-        long countPosts;
-        long countComments;
+            long countPosts;
+            long countComments;
 
-        countPosts = threadService.getUserPostsCount(user.getId());
-        model.addAttribute("userCountPosts", countPosts);
+            countPosts = threadService.getUserPostsCount(user.getId());
+            model.addAttribute("userCountPosts", countPosts);
 
-        countComments = commentService.getUserCommentsCount(user.getId());
-        model.addAttribute("userCountComments", countComments);
+            countComments = commentService.getUserCommentsCount(user.getId());
+            model.addAttribute("userCountComments", countComments);
 
-        return "user";
+            return "user";
+        }
+        model.addAttribute("errorUser404", "Пользователя не существует");
+        return "error";
     }
 
     @PostMapping("/updateUsername")
