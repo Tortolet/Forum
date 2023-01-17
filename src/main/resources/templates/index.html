@@ -29,8 +29,7 @@
                             [[${#httpServletRequest.remoteUser}]]
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a href="#" class="dropdown-item">Профиль</a></li>
-                            <li><a href="#" class="dropdown-item">Настройки</a></li>
+                            <li><a th:href="@{'/user/' + ${#httpServletRequest.remoteUser}}" class="dropdown-item">Профиль</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form th:action="@{/logout}" method="post">
@@ -71,11 +70,15 @@
             </div>
             <b>Больше всего постов:</b>
             <div th:if="${nameOfMaxPostsUser != null}">
-                <h1 th:text="${nameOfMaxPostsUser} + ': ' + ${maxPosts}"></h1>
+                <a th:href="@{'/user/' + ${nameOfMaxPostsUser}}">
+                    <h1 th:text="${nameOfMaxPostsUser} + ': ' + ${maxPosts}"></h1>
+                </a>
             </div>
             <b>Больше всего комментариев:</b>
             <div th:if="${nameOfMaxCommentsUser != null}">
-                <h1 th:text="${nameOfMaxCommentsUser} + ': ' + ${maxComments}"></h1>
+                <a th:href="@{'/user/' + ${nameOfMaxCommentsUser}}">
+                    <h1 th:text="${nameOfMaxCommentsUser} + ': ' + ${maxComments}"></h1>
+                </a>
             </div>
             <b>Больше всего лайков у поста:</b>
             <div th:if="${maxLikePost != null}">

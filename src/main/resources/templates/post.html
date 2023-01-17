@@ -23,8 +23,7 @@
               [[${#httpServletRequest.remoteUser}]]
             </a>
             <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a href="#" class="dropdown-item">Профиль</a></li>
-              <li><a href="#" class="dropdown-item">Настройки</a></li>
+              <li><a th:href="@{'/user/' + ${#httpServletRequest.remoteUser}}" class="dropdown-item">Профиль</a></li>
               <li><hr class="dropdown-divider"></li>
               <li>
                 <form th:action="@{/logout}" method="post">
