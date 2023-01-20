@@ -4,6 +4,8 @@ import com.example.forum.models.Groups;
 import com.example.forum.models.Themes;
 import com.example.forum.models.Threads;
 import com.example.forum.repos.ThreadRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +35,8 @@ public class ThreadService {
         return threadRepo.findAll();
     }
 
-    public List<Threads> allThreadsOrderBy() {
-        return threadRepo.findAllByOrderByIdDesc(); // выводит сначала новые записи
+    public Page<Threads> allThreadsOrderBy(Groups groups, Pageable pageable) {
+        return threadRepo.findByGroupsOrderByIdDesc(groups, pageable); // выводит сначала новые записи
     }
 
     public long getUserPostsCount(Long userId){

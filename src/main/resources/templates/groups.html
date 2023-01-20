@@ -59,7 +59,7 @@
   </div>
   <div class="threadInfoPin">
     <div th:each="thread : ${threads}">
-      <div th:if="${thread.getGroups() == group && thread.isPin() == true}" class="alert alert-success mt-3">
+      <div th:if="${thread.isPin() == true}" class="alert alert-success mt-3">
         <form th:action="@{/unpin}" method="post" sec:authorize="hasRole('ROLE_ADMIN')">
           <input type="hidden" th:value="${thread.getId()}" name="id">
           <input type="submit" class="btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:value="'&#10006'"/>
@@ -72,7 +72,7 @@
   </div>
   <div class="threadInfo">
     <div th:each="thread : ${threads}">
-      <div th:if="${thread.getGroups() == group && thread.isPin() == false}" class="alert alert-info mt-3">
+      <div th:if="${thread.isPin() == false}" class="alert alert-info mt-3">
         <form th:action="@{/pin}" method="post" sec:authorize="hasRole('ROLE_ADMIN')">
           <input type="hidden" th:value="${thread.getId()}" name="id">
           <input type="submit" class="btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:value="'&#128204'"/>
@@ -82,6 +82,24 @@
         <p th:text="'Автор: ' + ${thread.getUsers().getUsername()}"></p>
       </div>
     </div>
+  </div>
+  <div class="pack mb-3" th:if="${threads.getTotalPages() > 1}">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" th:if="${threads.getNumber() != 0}" th:href="@{'/group?id='+ ${getId} + '&page=' + ${threads.getNumber() - 1}}">Предыдущая</a>
+          <a class="page-link disabled" th:unless="${threads.getNumber() != 0}">Предыдущая</a>
+        </li>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, threads.getTotalPages() - 1)}">
+          <a class="page-link" th:if="${threads.getNumber() != i}" th:href="@{'/group?id='+ ${getId} + '&page=' + ${i}}">[[${i + 1}]]</a>
+          <a class="page-link active" th:unless="${threads.getNumber() != i}" href="#">[[${i + 1}]]</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" th:if="${threads.getNumber() < threads.getTotalPages() - 1}" th:href="@{'/group?id='+ ${getId} + '&page=' + ${threads.getNumber() + 1}}">Следующая</a>
+          <a class="page-link disabled" th:unless="${threads.getNumber() < threads.getTotalPages() - 1}">Следующая</a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
 </body>
