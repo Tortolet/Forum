@@ -108,7 +108,70 @@
     </div>
     <div class="comments_body" th:each="coms : ${comments}">
       <div class="alert alert-info mt-3">
-        <h1 th:text="${coms.getUsers().getUsername()}"></h1>
+        <div class="row">
+          <div class="col-auto">
+            <h1 th:text="${coms.getUsers().getUsername()}"></h1>
+          </div>
+          <div class="col-auto" th:if="${#httpServletRequest.remoteUser == coms.getUsers().getUsername()}">
+            <button class="btn mt-sm-2" th:text="'&#9999'" data-bs-toggle="modal" data-bs-target="#updateCommentModal"></button>
+          </div>
+          <div class="col-auto" th:if="${#httpServletRequest.remoteUser == coms.getUsers().getUsername()}">
+            <button class="btn mt-sm-2" th:text="'🗑'" data-bs-toggle="modal" data-bs-target="#deleteCommentModal"></button>
+          </div>
+          <div class="col-auto" sec:authorize="hasRole('ROLE_ADMIN')" th:if="${#httpServletRequest.remoteUser != coms.getUsers().getUsername()}">
+            <button class="btn mt-sm-2" th:text="'🗑'" data-bs-toggle="modal" data-bs-target="#deleteCommentModal"></button>
+          </div>
+        </div>
+
+        <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content rounded-4 shadow">
+              <div class="modal-header border-bottom-0">
+                <h1 class="modal-title fs-5">Удаление комментария</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body py-0">
+                <p>Вы действительно хотите удалить данный комментарий?</p>
+              </div>
+              <div class="modal-footer flex-column border-top-0">
+                <form th:action="@{/deleteComment}" method="post">
+                  <input type="hidden" th:value="${thread.getId()}" name="postId">
+                  <input type="hidden" th:value="${coms.getId()}" name="commentId">
+                  <input type="submit" th:value="'                                 Удалить                                 '" class="btn btn-lg btn-danger w-100 mx-0 mb-2">
+                </form>
+                <!--      <a th:href="@{'/deletePost?postId=' + ${thread.getId()}}" class="btn btn-lg btn-danger w-100 mx-0 mb-2">Удалить</a>-->
+                <button type="button" class="btn btn-lg btn-light w-100 mx-0 mb-2" data-bs-dismiss="modal">Закрыть</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="updateCommentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <form th:action="@{/updateComment}" method="post">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5">Обновление комментария</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="content_comment" class="form-label">Контент</label>
+                    <textarea class="form-control" id="content_comment" name="content" th:text="${coms.getContent()}" required></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                  <input type="hidden" th:value="${thread.getId()}" name="postId">
+                  <input type="hidden" th:value="${coms.getId()}" name="commentId">
+                  <input type="submit" class="btn btn-primary" value="Обновить"/>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+<!--        <h1 th:text="${coms.getUsers().getUsername()}"></h1>-->
         <p th:text="${coms.getContent()}"></p>
         <div class="date_create">
           <p th:text="${dateComment.get(coms)}"></p>

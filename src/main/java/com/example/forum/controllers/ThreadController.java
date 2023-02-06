@@ -302,4 +302,27 @@ public class ThreadController {
 
         return "redirect:/group?id=" + post.getGroups().getId();
     }
+
+    @PostMapping("/deleteComment")
+    public String deleteComment(@RequestParam Long postId, @RequestParam Long commentId){
+        Threads post = threadService.findThreadById(postId);
+        Comments comment = commentService.findCommentById(commentId);
+
+        userRepo.deleteLikesComment(comment.getId());
+        commentRepo.delete(comment);
+
+        return "redirect:/group/" + post.getGroups().getId() + "/post?id=" + post.getId();
+    }
+
+    @PostMapping("/updateComment")
+    public String updateComment(@RequestParam Long postId, @RequestParam Long commentId, @RequestParam String content){
+        Threads post = threadService.findThreadById(postId);
+        Comments comment = commentService.findCommentById(commentId);
+
+        comment.setContent(content);
+
+        commentService.save(comment);
+
+        return "redirect:/group/" + post.getGroups().getId() + "/post?id=" + post.getId();
+    }
 }
