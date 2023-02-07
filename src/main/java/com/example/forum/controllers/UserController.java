@@ -114,4 +114,20 @@ public class UserController {
         userService.save(user);
         return "redirect:/user/" + user.getUsername();
     }
+
+    @PostMapping("/banUser")
+    public String banCurrentUser(@RequestParam Long userID){
+        Users user = userService.findUserById(userID);
+        userService.banUser(user);
+
+        return "redirect:/user/" + user.getUsername();
+    }
+
+    @PostMapping("/unbanUser")
+    public String unbanCurrentUser(@RequestParam Long userID){
+        Users user = userService.findUserById(userID);
+        userService.unbanUser(user);
+
+        return "redirect:/user/" + user.getUsername();
+    }
 }

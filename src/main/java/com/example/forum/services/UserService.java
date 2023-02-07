@@ -47,4 +47,13 @@ public class UserService {
         return true;
     }
 
+    public void banUser(Users user){
+        user.setActive(false);
+        userRepository.save(user);
+    }
+
+    public void unbanUser(Users user){
+        user.setActive(true);
+        userRepository.save(user);
+    }
 }

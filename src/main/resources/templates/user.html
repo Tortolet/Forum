@@ -67,6 +67,8 @@
             <ul class="dropdown-menu dropdown-menu-dark">
                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateUsernameForAdmin">Изменить логин</button></li>
                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePassword">Изменить пароль</button></li>
+                <li sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.isActive() == true}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#banUser">Заблокировать пользвателя</button></li>
+                <li sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.isActive() == false}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unbanUser">Разблокировать пользвателя</button></li>
             </ul>
         </div>
     </div>
@@ -165,6 +167,50 @@
             </div>
         </div>
     </form>
+</div>
+
+<div class="modal fade" id="banUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-bottom-0">
+                <h1 class="modal-title fs-5">Блокировка пользователя</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-0">
+                <p>Вы действительно хотите заблокировать данного пользователя?</p>
+            </div>
+            <div class="modal-footer flex-column border-top-0">
+                <form th:action="@{/banUser}" method="post">
+                    <input type="hidden" th:value="${user.getId()}" name="userID">
+                    <input type="submit" th:value="'                           Заблокировать                           '" class="btn btn-lg btn-danger w-100 mx-0 mb-2">
+                </form>
+                <!--      <a th:href="@{'/deletePost?postId=' + ${thread.getId()}}" class="btn btn-lg btn-danger w-100 mx-0 mb-2">Удалить</a>-->
+                <button type="button" class="btn btn-lg btn-light w-100 mx-0 mb-2" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="unbanUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-bottom-0">
+                <h1 class="modal-title fs-5">Разблокировка пользователя</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-0">
+                <p>Вы действительно хотите разблокировать данного пользователя?</p>
+            </div>
+            <div class="modal-footer flex-column border-top-0">
+                <form th:action="@{/unbanUser}" method="post">
+                    <input type="hidden" th:value="${user.getId()}" name="userID">
+                    <input type="submit" th:value="'                          Разблокировать                          '" class="btn btn-lg btn-success w-100 mx-0 mb-2">
+                </form>
+                <!--      <a th:href="@{'/deletePost?postId=' + ${thread.getId()}}" class="btn btn-lg btn-danger w-100 mx-0 mb-2">Удалить</a>-->
+                <button type="button" class="btn btn-lg btn-light w-100 mx-0 mb-2" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
