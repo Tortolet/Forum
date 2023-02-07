@@ -20,7 +20,7 @@ public class UserAuthService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Users inDB = userRepo.findByUsername(username);
 
-        if(inDB == null){
+        if(inDB == null || !inDB.isActive()){
             throw new UsernameNotFoundException("User not found");
         }
 

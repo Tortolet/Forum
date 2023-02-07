@@ -67,8 +67,8 @@
             <ul class="dropdown-menu dropdown-menu-dark">
                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateUsernameForAdmin">Изменить логин</button></li>
                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePassword">Изменить пароль</button></li>
-                <li sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.isActive() == true}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#banUser">Заблокировать пользвателя</button></li>
-                <li sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.isActive() == false}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unbanUser">Разблокировать пользвателя</button></li>
+                <li sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.isActive() == true}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#banUser">Деактивировать пользвателя</button></li>
+                <li sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.isActive() == false}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unbanUser">Активировать пользвателя</button></li>
             </ul>
         </div>
     </div>
