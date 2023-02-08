@@ -80,6 +80,9 @@ public class UserController {
             countComments = commentService.getUserCommentsCount(user.getId());
             model.addAttribute("userCountComments", countComments);
 
+            boolean banned = user.getRoles().contains(Roles.ROLE_BANNED);
+            model.addAttribute("banned", banned);
+
             return "user";
         }
         model.addAttribute("errorUser404", "Пользователя не существует");
