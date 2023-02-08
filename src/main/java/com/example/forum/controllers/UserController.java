@@ -1,5 +1,6 @@
 package com.example.forum.controllers;
 
+import com.example.forum.models.Roles;
 import com.example.forum.models.Threads;
 import com.example.forum.models.Users;
 import com.example.forum.repos.ThreadRepo;
@@ -8,6 +9,9 @@ import com.example.forum.services.CommentService;
 import com.example.forum.services.ThreadService;
 import com.example.forum.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +62,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{username}")
+    @PreAuthorize("!hasAuthority('ROLE_BANNED')")
     public String getUser(Model model, @PathVariable String username){
         Users user = userRepo.findByUsername(username);
         if(user != null) {
@@ -82,6 +87,7 @@ public class UserController {
     }
 
     @PostMapping("/updateUsername")
+    @PreAuthorize("!hasAuthority('ROLE_BANNED')")
     public String updateInfoUser(@RequestParam Long id, @RequestParam String username, Model model){
         Users user = userService.findUserById(id);
         Users userInBD = userRepo.findByUsername(username);
@@ -95,6 +101,7 @@ public class UserController {
     }
 
     @PostMapping("/updateUsernameForAdmin")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String updateUsernameForAdmin(@RequestParam Long id, @RequestParam String username, Model model){
         Users user = userService.findUserById(id);
         Users userInBD = userRepo.findByUsername(username);
@@ -108,6 +115,7 @@ public class UserController {
     }
 
     @PostMapping("/updatePassword")
+    @PreAuthorize("!hasAuthority('ROLE_BANNED')")
     public String updatePassword(@RequestParam Long id, @RequestParam String password){
         Users user = userService.findUserById(id);
         user.setPassword(password);
@@ -115,7 +123,26 @@ public class UserController {
         return "redirect:/user/" + user.getUsername();
     }
 
+    @PostMapping("/disableUser")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String disableCurrentUser(@RequestParam Long userID){
+        Users user = userService.findUserById(userID);
+        userService.disableUser(user);
+
+        return "redirect:/user/" + user.getUsername();
+    }
+
+    @PostMapping("/activeUser")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String activateCurrentUser(@RequestParam Long userID){
+        Users user = userService.findUserById(userID);
+        userService.activeUser(user);
+
+        return "redirect:/user/" + user.getUsername();
+    }
+
     @PostMapping("/banUser")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String banCurrentUser(@RequestParam Long userID){
         Users user = userService.findUserById(userID);
         userService.banUser(user);
@@ -124,10 +151,20 @@ public class UserController {
     }
 
     @PostMapping("/unbanUser")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String unbanCurrentUser(@RequestParam Long userID){
         Users user = userService.findUserById(userID);
         userService.unbanUser(user);
 
         return "redirect:/user/" + user.getUsername();
+    }
+
+    @GetMapping("/ban")
+    public String banPage(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users user = userRepo.findByUsername(auth.getName());
+        boolean banned = user.getRoles().contains(Roles.ROLE_BANNED);
+        model.addAttribute("ban", banned);
+        return "ban";
     }
 }

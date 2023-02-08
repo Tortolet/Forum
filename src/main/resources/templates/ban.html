@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>403</title>
+</head>
+<body>
+  <h1>Доступ запрещен</h1>
+<div th:if="${ban}">
+  <p>Вы заблокированы</p>
+  <form th:action="@{/logout}" method="post">
+    <input type="submit" value="Выйти" class="btn btn-danger"/>
+  </form>
+</div>
+</body>
+</html>

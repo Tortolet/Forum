@@ -47,14 +47,23 @@ public class UserService {
         return true;
     }
 
-    // TODO: поменять setActive на смену роли ROLE_BANNED. Изменить конфиг
-    public void banUser(Users user){
+    public void disableUser(Users user){
         user.setActive(false);
         userRepository.save(user);
     }
 
-    public void unbanUser(Users user){
+    public void activeUser(Users user){
         user.setActive(true);
+        userRepository.save(user);
+    }
+
+    public void banUser(Users user){
+        user.getRoles().add(Roles.ROLE_BANNED);
+        userRepository.save(user);
+    }
+
+    public void unbanUser(Users user){
+        user.getRoles().remove(Roles.ROLE_BANNED);
         userRepository.save(user);
     }
 }

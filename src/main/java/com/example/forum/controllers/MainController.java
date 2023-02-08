@@ -1,14 +1,19 @@
 package com.example.forum.controllers;
 
+import com.example.forum.models.Roles;
 import com.example.forum.models.Users;
 import com.example.forum.repos.UserRepo;
 import com.example.forum.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@PreAuthorize("!hasAuthority('ROLE_BANNED')")
 public class MainController {
 
     @Autowired
